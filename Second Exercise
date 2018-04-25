@@ -1,0 +1,39 @@
+import threading
+from queue import Queue
+import time
+
+
+#we need to have a lock placed so each time something prints only one function can have access
+print_lock = threading.lock()
+
+
+def example(worker):
+  time.sleep(0.5)
+  with print_lock:
+      print(threading.current_thread().name, worker)
+
+q = Queue()
+
+def threader():
+    while True:
+        worker = q.get()
+        example(worker)
+        q.task_done()
+
+##we have 10 different threads available.  
+for x in range(10):
+  t = threading.Thread(target = threader)
+  
+  t.daemon = True
+  
+  t.start()
+  
+start = time.time()
+
+#worker is the variable, and there are 20 instances of our worker
+for worker in range(20):
+  q.put(worker)
+  
+q.join()
+
+print('Time to completion: ', time.time() - start):
