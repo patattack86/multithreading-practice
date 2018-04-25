@@ -1,0 +1,32 @@
+## going to run two programs in parellel. one will give the the square, the other will give the cube of each number in an array
+## using multi threading we can reduce the time of computation
+
+
+import time
+import threading
+
+def calc_square(numbers):
+    for n in numbers:
+        time.sleep(0.2)
+        print('Square: ', n^2)
+       
+
+def calc_cube(numbers):
+    for n in numbers:
+        time.sleep(0.2)
+        print('Cube: ', n^3)
+        
+arr = [2,4,6,8,10,12]
+
+t = time.time()
+
+t1 = threading.thread(target = calc_square, args=(arr,))
+t2 = threading.thread(target = calc_cube, args=(arr,))
+
+t1.start()
+t2.start()
+
+t1.join()
+t2.join()
+
+print('Done in : ", time.time()-t)
